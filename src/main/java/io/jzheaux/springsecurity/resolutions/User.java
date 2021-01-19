@@ -71,4 +71,15 @@ public class User implements Serializable {
         UserAuthority userAuthority = new UserAuthority(this, authority);
         this.userAuthorities.add(userAuthority);
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", enabled=" + enabled +
+                ", userAuthorities=" + userAuthorities +
+                '}';
+    }
 }

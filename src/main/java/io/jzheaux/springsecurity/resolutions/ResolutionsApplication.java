@@ -21,11 +21,11 @@ public class ResolutionsApplication extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity httpSecurity) throws Exception {
-		httpSecurity.authorizeRequests(auth ->
-				auth.mvcMatchers("POST", "/resolution/**")
-				.hasAuthority("resolution:write")
-				.mvcMatchers(HttpMethod.GET, "/resolutions", "/resolution/**")
-		.hasAuthority("resolution:read")
+		httpSecurity.authorizeRequests(auth -> auth
+				//auth.mvcMatchers(HttpMethod.POST, "/resolution")
+				//.hasAuthority("resolution:write")
+				//.mvcMatchers(HttpMethod.GET, "/resolutions", "/resolution/**")
+		//.hasAuthority("resolution:read")
 		.anyRequest()
 		.hasAuthority("resolution:write"))
 				.httpBasic(basic -> {});

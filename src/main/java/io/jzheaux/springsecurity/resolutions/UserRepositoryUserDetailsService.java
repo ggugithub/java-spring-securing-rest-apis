@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 public class UserRepositoryUserDetailsService implements UserDetailsService {
    private final UserRepository repository;
-   
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return this.repository.findByUsername(username)
