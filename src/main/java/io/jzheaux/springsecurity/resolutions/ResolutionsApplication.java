@@ -40,8 +40,9 @@ public class ResolutionsApplication extends WebSecurityConfigurerAdapter {
 						.build());
 	}*/
 	@Bean
-	public UserDetailsService userDetailsService(DataSource dataSource) {
-		return new JdbcUserDetailsManager(dataSource);
+	public UserDetailsService userDetailsService(UserRepository repository) {
+		//return new JdbcUserDetailsManager(dataSource);
+		return new UserRepositoryUserDetailsService(repository);
 	}
 
 }

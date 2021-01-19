@@ -1,18 +1,55 @@
 package io.jzheaux.springsecurity.resolutions;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
+import java.util.Collection;
+import java.util.stream.Collectors;
+
 public class UserRepositoryUserDetailsService implements UserDetailsService {
    private final UserRepository repository;
+   
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        throw new UsernameNotFoundException("No user");
+        return this.repository.findByUsername(username)
+                .map(user -> new BridgeUser(user))
+                .orElseThrow(() -> new UsernameNotFoundException("Invalid user"));
     }
 
     public UserRepositoryUserDetailsService(UserRepository repository) {
         this.repository = repository;
     }
 
+    private static class BridgeUser extends User implements UserDetails {
+
+        public BridgeUser(User user) {
+            super(user);
+        }
+
+        @Override
+        public Collection<? extends GrantedAuthority> getAuthorities() {
+            return this.userAuthorities.stream()
+                    .map(userAuth -> userAuth.getAuthority())
+                    .map(auth -> new SimpleGrantedAuthority(auth))
+                    .collect(Collectors.toList());
+        }
+
+        @Override
+        public boolean isAccountNonExpired() {
+            return this.enabled;
+        }
+
+        @Override
+        public boolean isAccountNonLocked() {
+            return this.enabled;
+        }
+
+        @Override
+        public boolean isCredentialsNonExpired() {
+            return this.enabled;
+        }
+    }
 }
